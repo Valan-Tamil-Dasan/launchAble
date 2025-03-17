@@ -18,6 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { CONFIG } from "../config";
 
 const generalItems = [
   {
@@ -51,10 +52,11 @@ const scheduleItems = [
   },
 ]
 export function AppSidebar() {
+  const title = CONFIG.TITLE;
   return (
-    <Sidebar>
+    <Sidebar collapsible="offcanvas" >
       <SidebarHeader className="p-4 font-bold text-center text-lg border-b">
-        Dis-helper
+        {title}
       </SidebarHeader>
       <SidebarGroup>
         <SidebarGroupLabel>General</SidebarGroupLabel>

@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Search, Calendar, FileText, MessageCircle } from "lucide-react";
+import CoachCalendar from "./coach-calendar";
 
 // Sample application data
 const applications = [
@@ -83,12 +84,13 @@ export function CoachInbox() {
   });
 
   return (
+    <div className = "w-full  min-h-screen flex flex-row justify-center">
 
-    <div className="flex flex-col px-10 py-10 align-middle justify-center w-full mx-auto">
-      <div className="flex items-center min-w-2xl justify-between mb-4">
+    <div className="flex flex-col px-10 py-10 mb-auto align-middle justify-center w-full mx-auto">
+      <div className="flex items-center w-[1200px]  justify-between mb-3">
         <h1 className="text-2xl text-center font-bold">Review Inbox</h1>
         <Tabs defaultValue="all" className="w-[200px]" onValueChange={setFilter}>
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid grid-cols-2">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="unread">Unreviewed</TabsTrigger>
           </TabsList>
@@ -109,7 +111,7 @@ export function CoachInbox() {
         {filteredApplications.map((app) => (
           <Card 
             key={app.id} 
-            className={`cursor-pointer transition-all hover:shadow ${app.unread ? 'border-l-4 border-l-blue-500' : ''}`}
+            className={`cursor-pointer transition-all hover:shadow ${app.unread ? 'border-l-4 border-l-gray-500' : ''}`}
           >
             <CardContent className="p-0">
               <div className="p-4">
@@ -117,7 +119,7 @@ export function CoachInbox() {
                   <div className="flex items-center">
                     <h3 className={`text-lg ${app.unread ? 'font-bold' : 'font-medium'}`}>{app.name}</h3>
                     {app.unread && (
-                      <span className="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
+                      <span className="ml-2 w-2 h-2 bg-gray-500 rounded-full"></span>
                     )}
                   </div>
                   <span className="text-sm text-slate-500">{app.time}</span>
@@ -179,6 +181,8 @@ export function CoachInbox() {
           </Card>
         ))}
       </div>
+    </div>
+    { <CoachCalendar/> }
     </div>
   );
 }
