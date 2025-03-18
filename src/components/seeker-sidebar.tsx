@@ -22,7 +22,7 @@ import {
 const profileItems = [
   {
     title: "Profile",
-    url: "/",
+    url: "seeker-edit-profile",
     icon: FileUser,
   },
   {
