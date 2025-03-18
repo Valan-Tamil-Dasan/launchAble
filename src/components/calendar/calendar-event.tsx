@@ -87,12 +87,18 @@ export default function CalendarEvent({
     isEventInCurrentMonth ? 'current' : 'adjacent'
   }`
 
+  const getEventColor = (type: string) => {
+    if (type === "Meet") return "blue";
+    if (type === "Online Assessment") return "emerald";
+    return "pink"; // Default color
+  };
+
   return (
     <MotionConfig reducedMotion="user">
       <AnimatePresence mode="wait">
         <motion.div
           className={cn(
-            `px-3 py-1.5 rounded-md truncate cursor-pointer transition-all duration-300 bg-${event.color}-500/10 hover:bg-${event.color}-500/20 border border-${event.color}-500`,
+            `px-3 py-1.5 rounded-md truncate cursor-pointer transition-all duration-300 bg-${getEventColor(event.type)}-500/10 hover:bg-${getEventColor(event.type)}-500/20 border border-${getEventColor(event.type)}-500`,
             !month && 'absolute',
             className
           )}
@@ -136,7 +142,7 @@ export default function CalendarEvent({
         >
           <motion.div
             className={cn(
-              `flex flex-col w-full text-${event.color}-500`,
+              `flex flex-col w-full text-${getEventColor(event.type)}-500`,
               month && 'flex-row items-center justify-between'
             )}
             layout="position"

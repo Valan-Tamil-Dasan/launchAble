@@ -22,6 +22,7 @@ export type CalendarEvent = {
   color: string
   start: Date
   end: Date
+  type: string
 }
 
 export const calendarModes = ['day', 'week', 'month'] as const

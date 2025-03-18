@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from '@/components/ui/button'
 import { useCalendarContext } from '../calendar-context'
 import { format } from 'date-fns'
@@ -45,6 +46,9 @@ const formSchema = z
       message: 'Invalid end date',
     }),
     color: z.string(),
+     type: z.enum(["Online Assessment", "Meet", "Other"], {
+      errorMap: () => ({ message: "Invalid type selected" }),
+    }),
   })
   .refine(
     (data) => {
@@ -78,43 +82,60 @@ export default function CalendarManageEventDialog() {
       title: '',
       start: '',
       end: '',
-      color: 'blue',
+      color: 'pink',
+      type: 'Other', // Default type
     },
   })
 
-  useEffect(() => {
-    if (selectedEvent) {
-      form.reset({
-        title: selectedEvent.title,
-        start: format(selectedEvent.start, "yyyy-MM-dd'T'HH:mm"),
-        end: format(selectedEvent.end, "yyyy-MM-dd'T'HH:mm"),
-        color: selectedEvent.color,
-      })
-    }
-  }, [selectedEvent, form])
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!selectedEvent) return
+const type = form.watch("type"); // Watch the type field
 
-    const updatedEvent = {
-      ...selectedEvent,
-      title: values.title,
-      start: new Date(values.start),
-      end: new Date(values.end),
-      color: values.color,
-    }
-
-    setEvents(
-      events.map((event) =>
-        event.id === selectedEvent.id ? updatedEvent : event
-      )
-    )
-    handleClose()
+useEffect(() => {
+  if (type === "Meet") {
+    form.setValue("color", "blue");
+  } else if (type === "Online Assessment") {
+    form.setValue("color", "emerald");
+  } else {
+    form.setValue("color", "pink");
   }
+}, [type, form]);
+
+useEffect(() => {
+  if (selectedEvent) {
+    form.reset({
+      title: selectedEvent.title,
+      start: format(selectedEvent.start, "yyyy-MM-dd'T'HH:mm"),
+      end: format(selectedEvent.end, "yyyy-MM-dd'T'HH:mm"),
+      color: selectedEvent.color,
+      type: selectedEvent.type, // Added type
+    })
+  }
+}, [selectedEvent, form])
+
+function onSubmit(values: z.infer<typeof formSchema>) {
+  if (!selectedEvent) return
+
+  const updatedEvent = {
+    ...selectedEvent,
+    title: values.title,
+    start: new Date(values.start),
+    end: new Date(values.end),
+    color: values.color,
+    type: values.type, // Added type
+  }
+
+  setEvents(
+    events.map((event) =>
+      event.id === selectedEvent.id ? updatedEvent : event
+    )
+  )
+  handleClose()
+}
 
   function handleDelete() {
     if (!selectedEvent) return
     setEvents(events.filter((event) => event.id !== selectedEvent.id))
+    // I don't know how we are going to handle delete real time
     handleClose()
   }
 
@@ -174,20 +195,46 @@ export default function CalendarManageEventDialog() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="color"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-bold">Color</FormLabel>
-                  <FormControl>
-                    <ColorPicker field={field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-bold">Type</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Online Assessment">Online Assessment</SelectItem>
+                      <SelectItem value="Meet">Meet</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+      {
+        /*
+                  <FormField
+                    control={form.control}
+                    name="color"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-bold">Color</FormLabel>
+                        <FormControl>
+                          <ColorPicker field={field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+        */
+      }
             <DialogFooter className="flex justify-between gap-2">
               <AlertDialog>
                 <AlertDialogTrigger asChild>
