@@ -41,7 +41,7 @@ const scheduleItems = [
 const jobActions = [
   {
     title: "Online Assesment",
-    url : "/",
+    url : "seeker-oa",
     icon : BookCheck,
   },
   {

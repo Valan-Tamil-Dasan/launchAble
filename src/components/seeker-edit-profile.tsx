@@ -11,7 +11,6 @@ import { Toaster  } from "./ui/sonner";
 import {toast} from "sonner"
 import { RadioGroup } from "@/components/ui/radio-group";
 import { User2 } from "lucide-react";
-import { Form } from "react-hook-form";
 
 interface ProfileFormData {
   name: string;
