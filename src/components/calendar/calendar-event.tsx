@@ -25,39 +25,47 @@ function getOverlappingEvents(
   })
 }
 
-function calculateEventPosition(
-  event: CalendarEventType,
-  allEvents: CalendarEventType[]
-): EventPosition {
-  const overlappingEvents = getOverlappingEvents(event, allEvents)
+function calculateEventPosition(event: CalendarEventType, allEvents: CalendarEventType[]): EventPosition {
+  const overlappingEvents = getOverlappingEvents(event, allEvents);
   const group = [event, ...overlappingEvents].sort(
-    (a, b) => a.start.getTime() - b.start.getTime()
-  )
-  const position = group.indexOf(event)
-  const width = `${100 / (overlappingEvents.length + 1)}%`
-  const left = `${(position * 100) / (overlappingEvents.length + 1)}%`
+    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()
+  );
+  
+  const position = group.indexOf(event);
+  const width = `${100 / (overlappingEvents.length + 1)}%`;
+  const left = `${(position * 100) / (overlappingEvents.length + 1)}%`;
 
-  const startHour = event.start.getHours()
-  const startMinutes = event.start.getMinutes()
+  const startDate = event.start instanceof Date ? event.start : new Date(event.start);
+  const endDate = event.end instanceof Date ? event.end : new Date(event.end);
 
-  let endHour = event.end.getHours()
-  let endMinutes = event.end.getMinutes()
+  console.log("Start Date:", startDate, "End Date:", endDate);
 
-  if (!isSameDay(event.start, event.end)) {
-    endHour = 23
-    endMinutes = 59
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    console.error("Invalid date detected:", event);
+    return { left, width, top: "0px", height: "0px" }; 
   }
 
-  const topPosition = startHour * 128 + (startMinutes / 60) * 128
-  const duration = endHour * 60 + endMinutes - (startHour * 60 + startMinutes)
-  const height = (duration / 60) * 128
+  const startHour = startDate.getHours();
+  const startMinutes = startDate.getMinutes();
+
+  let endHour = endDate.getHours();
+  let endMinutes = endDate.getMinutes();
+
+  if (!isSameDay(startDate, endDate)) {
+    endHour = 23;
+    endMinutes = 59;
+  }
+
+  const topPosition = startHour * 128 + (startMinutes / 60) * 128;
+  const duration = endHour * 60 + endMinutes - (startHour * 60 + startMinutes);
+  const height = (duration / 60) * 128;
 
   return {
     left,
     width,
     top: `${topPosition}px`,
     height: `${height}px`,
-  }
+  };
 }
 
 export default function CalendarEvent({
