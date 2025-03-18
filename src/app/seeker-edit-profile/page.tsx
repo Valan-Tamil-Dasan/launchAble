@@ -1,7 +1,7 @@
 import SeekerEditProfile from "../../components/seeker-edit-profile";
 import { Title } from "@/components/title";
 
-function ResumePage(){
+function ProfilePage(){
   return(
     <>
       <div className="flex w-full justify-center mt-auto">
@@ -11,4 +11,4 @@ function ResumePage(){
   )
 };
 
-export default ResumePage;
+export default ProfilePage;

@@ -34,7 +34,7 @@ const profileItems = [
 const scheduleItems = [
   {
     title: "Schedule",
-    url : "/",
+    url : "coach-schedule",
     icon : Calendar,
   },
 ]
@@ -46,7 +46,7 @@ const jobActions = [
   },
   {
     title: "Notes",
-    url : "/",
+    url : "seeker-notes",
     icon : FileText,
   },
   {
