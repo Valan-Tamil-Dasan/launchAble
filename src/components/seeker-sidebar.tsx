@@ -51,7 +51,7 @@ const jobActions = [
   },
   {
     title: "Meet",
-    url : "/",
+    url : "seeker-meet",
     icon : Video,
   },
 ]
