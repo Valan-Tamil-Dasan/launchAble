@@ -1,7 +1,9 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, PlayCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const assessments = [
   {
@@ -37,6 +39,7 @@ const assessments = [
 ];
 
 export default function SeekerOA() {
+  const router = useRouter();
   return (
 <div className="p-6">
 
@@ -82,7 +85,11 @@ export default function SeekerOA() {
           </div>
 
           {/* Take Assessment Button */}
-          <Button className="w-full flex items-center gap-2" variant="default">
+          <Button
+            className="w-full flex items-center gap-2"
+            variant="default"
+            onClick={() => router.push(`/seeker-oa/${1}`)}
+          >
             <PlayCircle className="w-5 h-5" />
             Take Assessment
           </Button>

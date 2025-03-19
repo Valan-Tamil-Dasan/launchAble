@@ -19,39 +19,41 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
+import Link from "next/link";
+
 const profileItems = [
   {
     title: "Profile",
-    url: "seeker-edit-profile",
+    url: "/seeker-edit-profile",
     icon: FileUser,
   },
   {
     title: "Resume",
-    url: "seeker-resume",
+    url: "/seeker-resume",
     icon: FileUp,
   },
 ]
 const scheduleItems = [
   {
     title: "Schedule",
-    url : "coach-schedule",
+    url : "/coach-schedule",
     icon : Calendar,
   },
 ]
 const jobActions = [
   {
     title: "Online Assesment",
-    url : "seeker-oa",
+    url : "/seeker-oa",
     icon : BookCheck,
   },
   {
     title: "Notes",
-    url : "seeker-notes",
+    url : "/seeker-notes",
     icon : FileText,
   },
   {
     title: "Meet",
-    url : "seeker-meet",
+    url : "/seeker-meet",
     icon : Video,
   },
 ]
@@ -66,52 +68,52 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Profile Menu</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {profileItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+      <SidebarMenu>
+        {profileItems.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild>
+              <Link href={item.url}>
+                <item.icon />
+                <span>{item.title}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       <SidebarGroup>
         <SidebarGroupLabel>Schedule</SidebarGroupLabel>
         <SidebarGroupContent>
-          <SidebarMenu>
-            {scheduleItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+      <SidebarMenu>
+        {scheduleItems.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild>
+              <Link href={item.url}>
+                <item.icon />
+                <span>{item.title}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
       <SidebarGroup>
         <SidebarGroupLabel>General</SidebarGroupLabel>
         <SidebarGroupContent>
-          <SidebarMenu>
-            {jobActions.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+      <SidebarMenu>
+        {jobActions.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild>
+              <Link href={item.url}>
+                <item.icon />
+                <span>{item.title}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
       </SidebarContent>
