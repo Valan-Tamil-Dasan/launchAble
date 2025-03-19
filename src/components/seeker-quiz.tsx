@@ -1,3 +1,4 @@
+// components/QuizComponent.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,12 +7,14 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 
+// Extended types to include correct answers
 interface QuizQuestion {
   id: string;
   question: string;
   options: string[];
+  correctAnswer: string; // Add correct answer field
 }
 
 interface QuizData {
@@ -28,6 +31,7 @@ const QuizComponent = ({ quizData }: QuizComponentProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const currentQuestion = quizData.questions[currentQuestionIndex];
   const totalQuestions = quizData.questions.length;
@@ -45,6 +49,7 @@ const QuizComponent = ({ quizData }: QuizComponentProps) => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setIsCompleted(true);
+      setShowResults(true);
     }
   };
 
@@ -54,7 +59,24 @@ const QuizComponent = ({ quizData }: QuizComponentProps) => {
     }
   };
 
-  if (isCompleted) {
+  const calculateScore = () => {
+    let score = 0;
+    quizData.questions.forEach((question) => {
+      if (answers[question.id] === question.correctAnswer) {
+        score++;
+      }
+    });
+    return score;
+  };
+
+  // Handle sharing with coach
+  const handleShareWithCoach = () => {
+    // In a real application, you would make an API call here to share results
+    // For now, we'll just set a flag to show the completion message
+    setShowResults(false);
+  };
+
+  if (isCompleted && !showResults) {
     return (
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
@@ -69,6 +91,61 @@ const QuizComponent = ({ quizData }: QuizComponentProps) => {
             Your responses have been shared with your coach for review.
           </p>
         </CardContent>
+      </Card>
+    );
+  }
+
+  if (isCompleted && showResults) {
+    const score = calculateScore();
+    const percentage = Math.round((score / totalQuestions) * 100);
+
+    return (
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-center">Assessment Results</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-lg font-medium">Your Score</span>
+              <span className="text-lg font-bold">{score}/{totalQuestions} ({percentage}%)</span>
+            </div>
+            <Progress value={percentage} className="h-2 w-full" />
+          </div>
+
+          <div className="space-y-6">
+            {quizData.questions.map((question, index) => {
+              const isCorrect = answers[question.id] === question.correctAnswer;
+              return (
+                <div key={question.id} className="border rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <div className={`mt-1 flex-shrink-0 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                      {isCorrect ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="font-medium">
+                        Question {index + 1}: {question.question}
+                      </h3>
+                      <div className="mt-2 space-y-1 text-sm">
+                        <p>Your answer: <span className={isCorrect ? 'font-medium text-green-600' : 'font-medium text-red-600'}>
+                          {answers[question.id] || "Not answered"}
+                        </span></p>
+                        {!isCorrect && (
+                          <p>Correct answer: <span className="font-medium text-green-600">{question.correctAnswer}</span></p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button onClick={handleShareWithCoach} className="w-full max-w-xs">
+            Share Results with Coach
+          </Button>
+        </CardFooter>
       </Card>
     );
   }
