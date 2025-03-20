@@ -53,7 +53,7 @@ const scheduleItems = [
     icon : Video,
   },
 ]
-export function AppSidebar() {
+export function CoachSidebar() {
   const title = CONFIG.TITLE;
   return (
     <Sidebar collapsible="offcanvas" >

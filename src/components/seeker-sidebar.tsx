@@ -57,7 +57,7 @@ const jobActions = [
     icon : Video,
   },
 ]
-export function AppSidebar() {
+export function SeekerSidebar() {
   const title = CONFIG.TITLE;
   return (
     <Sidebar collapsible="offcanvas" >
